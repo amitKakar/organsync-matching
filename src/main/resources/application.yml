@@ -1,0 +1,127 @@
+# OrganSync Matching Service Configuration
+server:
+  port: 8084
+  servlet:
+    context-path: /matching
+
+spring:
+  application:
+    name: organsync-matching-service
+
+  profiles:
+    active: dev
+
+  # Database Configuration (H2 for development)
+  datasource:
+    url: jdbc:h2:mem:matching_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+
+  # Redis Configuration
+  redis:
+    host: localhost
+    port: 6379
+    password: 
+    timeout: 2000ms
+
+  # Kafka Configuration
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: matching-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+      properties:
+        enable.idempotence: true
+
+  # Security Configuration
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/auth/realms/organsync
+          jwk-set-uri: http://localhost:8080/auth/realms/organsync/protocol/openid-connect/certs
+
+# Management and Monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# Logging Configuration
+logging:
+  level:
+    com.organsync.matching: DEBUG
+    org.springframework.kafka: INFO
+    org.hibernate: INFO
+    org.springframework.security: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/matching-service.log
+    max-size: 10MB
+    max-history: 30
+
+# Application Specific Configuration
+organsync:
+  matching:
+    algorithm:
+      max-cycle-length: 3
+      max-chain-length: 5
+      timeout-seconds: 30
+    cache:
+      compatibility-ttl: 3600 # 1 hour
+      match-results-ttl: 1800 # 30 minutes
+    notifications:
+      enabled: true
+      webhook-url: http://localhost:8087/api/v1/notifications
+
+# API Documentation
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+
+# Thread Pool Configuration
+app:
+  thread-pool:
+    core-size: 5
+    max-size: 20
+    queue-capacity: 100
+    keep-alive-seconds: 60

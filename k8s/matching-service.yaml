@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: organsync-matching-service
+  namespace: organsync
+  labels:
+    app: matching-service
+    version: v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: matching-service
+  template:
+    metadata:
+      labels:
+        app: matching-service
+        version: v1
+    spec:
+      containers:
+      - name: matching-service
+        image: organsync/matching-service:latest
+        ports:
+        - containerPort: 8084
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "docker"
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:postgresql://postgres:5432/organsync_matching"
+        - name: SPRING_REDIS_HOST
+          value: "redis"
+        - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+          value: "kafka:9092"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /matching/actuator/health
+            port: 8084
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /matching/actuator/health
+            port: 8084
+          initialDelaySeconds: 30
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: matching-service
+  namespace: organsync
+  labels:
+    app: matching-service
+spec:
+  selector:
+    app: matching-service
+  ports:
+  - port: 8084
+    targetPort: 8084
+    name: http
+  type: ClusterIP

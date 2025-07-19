@@ -1,0 +1,29 @@
+[
+  {
+    "donorPairId": "550e8400-e29b-41d4-a716-446655440001",
+    "recipientPairId": "550e8400-e29b-41d4-a716-446655440002",
+    "bloodTypeCompatible": true,
+    "hlaCompatible": true,
+    "crossmatchCompatible": true,
+    "compatibilityScore": 0.95,
+    "distanceKm": 25.5
+  },
+  {
+    "donorPairId": "550e8400-e29b-41d4-a716-446655440002",
+    "recipientPairId": "550e8400-e29b-41d4-a716-446655440003",
+    "bloodTypeCompatible": true,
+    "hlaCompatible": true,
+    "crossmatchCompatible": true,
+    "compatibilityScore": 0.87,
+    "distanceKm": 45.2
+  },
+  {
+    "donorPairId": "550e8400-e29b-41d4-a716-446655440003",
+    "recipientPairId": "550e8400-e29b-41d4-a716-446655440001",
+    "bloodTypeCompatible": true,
+    "hlaCompatible": true,
+    "crossmatchCompatible": true,
+    "compatibilityScore": 0.92,
+    "distanceKm": 32.1
+  }
+]

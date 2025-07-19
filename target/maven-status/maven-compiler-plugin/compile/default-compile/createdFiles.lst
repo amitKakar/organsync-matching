@@ -1,0 +1,16 @@
+com\organsync\matching\dto\MatchDto.class
+com\organsync\matching\service\MatchingService.class
+com\organsync\matching\service\MatchingService$MatchStatistics.class
+com\organsync\matching\repository\MatchRepository.class
+com\organsync\matching\repository\CompatibilityRepository.class
+com\organsync\matching\MatchingServiceApplication.class
+com\organsync\matching\event\DonorRegistrationEventListener.class
+com\organsync\matching\entity\MatchStatus.class
+com\organsync\matching\entity\Match.class
+com\organsync\matching\entity\MatchType.class
+com\organsync\matching\api\MatchingController.class
+com\organsync\matching\dto\CompatibilityDto.class
+com\organsync\matching\config\KafkaConfig.class
+com\organsync\matching\entity\Compatibility.class
+com\organsync\matching\algorithm\MatchingAlgorithmService.class
+com\organsync\matching\api\MatchingController$StatusUpdateRequest.class
